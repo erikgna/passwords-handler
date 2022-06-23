@@ -30,6 +30,7 @@ class CategoryService {
             await categoryDal.create(payload);
             return { status: 201 }
         } catch (error) {
+            console.log(error)
             if(error instanceof CategoryError) return { status: error.status, message: error.message };
             return { status: 500, message: "An internal error ocurred." }
         }

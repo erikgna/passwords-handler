@@ -18,15 +18,15 @@ export class UserVerifications{
         const upperLetters = /[QWERTYUIOPASDFGHJKLZXCVBNM]+/;
 
         if(
-            this._user.password.length <= 7 ||
-            !specials.test(this._user.email) ||
-            !numbers.test(this._user.email) ||
-            !upperLetters.test(this._user.email)
+            this._user.password.length < 7 ||
+            !specials.test(this._user.password) ||
+            !numbers.test(this._user.password) ||
+            !upperLetters.test(this._user.password)
         ) throw new UserError(406, "Password should be at least 8 characters, at least one special character, one number and one uppercase.");
     }
 
     verifyName(){
-        if(this._user.user_name.length <= 3) throw new UserError(406, "Name must have at least 4 characters");
+        if(this._user.user_name.length < 3) throw new UserError(406, "Name must have at least 3 characters");
     }
 
     verifyActive(){

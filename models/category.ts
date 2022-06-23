@@ -1,11 +1,12 @@
 import { DataTypes, Model } from 'sequelize'
 import sequelizeConnection from '../config'
 import { ICategory } from '../interfaces/Category'
+import Password from './password'
 
 class Category extends Model<ICategory> implements ICategory {
     public id!: number
     public category_name!: string
-    public password_id!: number
+    public user_id!: number
     public category_total!: number
     
     public readonly createdAt!: Date;
@@ -23,10 +24,8 @@ Category.init({
         allowNull: false,
         unique: true
     },
-    password_id: {
+    user_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
-        unique: true
     },
     category_total: {
         type: DataTypes.INTEGER,
@@ -34,5 +33,11 @@ Category.init({
 }, {
   sequelize: sequelizeConnection,
 })
+
+Category.hasMany(Password, {
+    sourceKey: 'id',
+    foreignKey: 'category_id',
+    onDelete: 'CASCADE'
+});
 
 export default Category

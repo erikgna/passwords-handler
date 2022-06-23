@@ -15,8 +15,4 @@ export class PasswordVerifications{
     verifyPassword(){
         if(this._password.password.length <= 5) throw new PasswordError(406, "Password shoud be at least 6 letters.");
     }
-
-    verifyIDS(){
-        if(!this._password.user_id || !this._password.category_id) throw new PasswordError(406, "Must be have category and user");
-    }
 }

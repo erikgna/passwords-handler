@@ -13,6 +13,6 @@ export class CategoryVerifications{
     }
 
     verifyCategoryTotal(){
-        if(this._category.category_total === 0) throw new CategoryError(406, "Total in creation shoud be zero.");
+        if(this._category.category_total !== 0) throw new CategoryError(406, "Total in creation shoud be zero.");
     }
 }

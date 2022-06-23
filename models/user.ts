@@ -2,6 +2,8 @@ import { DataTypes, Model } from 'sequelize'
 import sequelizeConnection from '../config'
 
 import { IUser } from '../interfaces/User'
+import Category from './category'
+import Password from './password'
 
 class User extends Model<IUser> implements IUser {
     public id!: number
@@ -21,6 +23,7 @@ User.init({
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
+        unique: true
     },
     email: {
         type: DataTypes.STRING,
@@ -30,7 +33,6 @@ User.init({
     user_name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
     },
     password: {
         type: DataTypes.TEXT,
@@ -39,20 +41,32 @@ User.init({
     },
     access_token: {
         type: DataTypes.TEXT,
-        allowNull: false,
-        unique: true
+        allowNull: true,
+        defaultValue: ''
     },
     refresh_token: {
         type: DataTypes.TEXT,
         allowNull: true,
-        unique: true
+        defaultValue: ''
     },
     is_active: {
         type: DataTypes.BOOLEAN,
-        unique: true
+        defaultValue: false
     },
 }, {
   sequelize: sequelizeConnection,
-})
+});
+
+User.hasMany(Password, {
+    sourceKey: 'id',
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE'
+});
+
+User.hasMany(Category, {
+    sourceKey: 'id',
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE'
+});
 
 export default User

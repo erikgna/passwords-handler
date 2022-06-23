@@ -27,10 +27,9 @@ export const create = async (payload: IPassword): Promise<IPassword> => {
     const verification:PasswordVerifications = new PasswordVerifications(payload);
     
     verification.verifyContentName();
-    verification.verifyIDS();
     verification.verifyPassword();
 
-    if(process.env.PASSWORD_HASH) payload.password = await bcrypt.hash(payload.password, process.env.PASSWORD_HASH);
+    payload.password = await bcrypt.hash(payload.password, 12);
 
     const password = await Password.create(payload);
 
@@ -43,14 +42,13 @@ export const update = async (id: number, payload: IPassword): Promise<IPassword>
     const verification:PasswordVerifications = new PasswordVerifications(payload);
     
     verification.verifyContentName();
-    verification.verifyIDS();
     verification.verifyPassword();
     
     const password = await Password.findByPk(id);
 
     if (!password) throw new PasswordError(406, 'This password was not found');
 
-    if(process.env.PASSWORD_HASH) payload.password = await bcrypt.hash(payload.password, process.env.PASSWORD_HASH);
+    payload.password = await bcrypt.hash(payload.password, 12);
 
     const updatedPassword = await password.update(payload);
 

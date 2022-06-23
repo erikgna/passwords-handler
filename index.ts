@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import passwords from './routes/passwords';
 import category from './routes/category';
+import user from './routes/user';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.get('/', (req:Request, res:Response) => {
 
 app.use('/api/v1', passwords);
 app.use('/api/v1', category);
+app.use('/api/v1', user);
 
 app.use((req:Request, res:Response) => {
     res.status(404);
