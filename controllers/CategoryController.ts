@@ -4,7 +4,7 @@ import CategoryService from "../services/category";
 
 class CategoryController extends CategoryService {
     public static async categorys(req: Request, res:Response) {
-        const result:IResult = await CategoryService.getAll();
+        const result:IResult = await CategoryService.getAll(parseInt(req.body.user_id));
         res.status(result.status).json(result.message);
     }
 

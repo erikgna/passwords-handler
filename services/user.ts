@@ -35,16 +35,6 @@ class UserService {
         }
     
     }
-
-    public static refreshToken = async (token: string): Promise<IResult> => {
-        try {
-            await userDal.refreshToken(token);
-            return { status: 200 }
-        } catch (error) {
-            if(error instanceof UserError) return { status: error.status, message: error.message };
-            return { status: 500, message: "An internal error ocurred." }
-        }
-    }
 }
 
 export default UserService;

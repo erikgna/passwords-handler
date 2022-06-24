@@ -4,7 +4,7 @@ import PasswordService from "../services/password";
 
 class PasswordController extends PasswordService {
     public static async passwords(req: Request, res:Response) {
-        const result:IResult = await PasswordService.getAll();
+        const result:IResult = await PasswordService.getAll(parseInt(req.body.user_id));
         res.status(result.status).json(result.message);
     }
 

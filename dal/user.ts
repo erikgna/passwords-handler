@@ -12,7 +12,6 @@ export const login = async (payload: IUser): Promise<IToken> => {
     const verification:UserVerifications = new UserVerifications(payload);
 
     verification.verifyEmail();
-    verification.verifyName();
     verification.verifyPassword();
 
     const dbUser = await User.findOne(
@@ -99,9 +98,8 @@ export const verifyEmail = async (id: number): Promise<IUser> => {
 }
 
 export const refreshToken = async (refreshToken: string): Promise<IToken> => {
-    console.log(refreshToken)
     const decodedToken:IRefreshToken = jwt.decode(refreshToken) as IRefreshToken;
-    
+
     if(!decodedToken) throw new UserError(401, 'No token provided');
     
     const user = await User.findByPk(decodedToken.id);

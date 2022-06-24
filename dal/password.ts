@@ -1,18 +1,26 @@
 require('dotenv').config()
 
-import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import { PasswordError } from '../errors/PasswordError'
 import { IPassword } from '../interfaces/Password'
-import { Password } from '../models'
+import { Category, Password } from '../models'
 import { PasswordVerifications } from '../utils/Password/PasswordVerifications';
 
-export const getAll = async (): Promise<IPassword[]> => {
-    return Password.findAll(
+export const getAll = async (user_id: number): Promise<IPassword[]> => {
+    const passwords = await Password.findAll(
         {
+            where: { user_id },
             order: [["content_name", "DESC"]]
         }
     );
+
+    passwords.forEach((password) => {
+        const decodedToken:{pwd:string} = jwt.verify(password.password, process.env.SECRET as string) as {pwd:string};
+        password.password =  decodedToken['pwd'];
+    })
+
+    return passwords;
 }
 
 export const getById = async (id: number): Promise<IPassword> => {
@@ -25,11 +33,15 @@ export const getById = async (id: number): Promise<IPassword> => {
 
 export const create = async (payload: IPassword): Promise<IPassword> => {
     const verification:PasswordVerifications = new PasswordVerifications(payload);
-    
+
+    const category = await Category.findOne({where: { id: payload.category_id }});
+
+    if(category?.user_id !== payload.user_id) throw new PasswordError(400, "Couldn't create password.");
+
     verification.verifyContentName();
     verification.verifyPassword();
 
-    payload.password = await bcrypt.hash(payload.password, 12);
+    payload.password = jwt.sign({pwd: payload.password}, process.env.SECRET as string);
 
     const password = await Password.create(payload);
 
@@ -48,7 +60,7 @@ export const update = async (id: number, payload: IPassword): Promise<IPassword>
 
     if (!password) throw new PasswordError(406, 'This password was not found');
 
-    payload.password = await bcrypt.hash(payload.password, 12);
+    payload.password = jwt.sign({pwd: payload.password}, process.env.SECRET as string)
 
     const updatedPassword = await password.update(payload);
 

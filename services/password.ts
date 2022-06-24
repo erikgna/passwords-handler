@@ -4,9 +4,9 @@ import { IPassword } from '../interfaces/Password';
 import { IResult } from '../interfaces/Result'
 
 class PasswordService {
-    public static getAll = async ():Promise<IResult> => {
+    public static getAll = async (user_id: number):Promise<IResult> => {
         try {
-            const all:IPassword[] = await passwordDal.getAll();
+            const all:IPassword[] = await passwordDal.getAll(user_id);
             return { status: 200, message: all }   
         } catch (error) {
             if(error instanceof PasswordError) return { status: error.status, message: error.message };

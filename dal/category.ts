@@ -3,9 +3,10 @@ import { ICategory } from '../interfaces/Category'
 import {Category} from '../models'
 import { CategoryVerifications } from '../utils/Category/CategoryVerifications';
 
-export const getAll = async (): Promise<ICategory[]> => {
+export const getAll = async (user_id: number): Promise<ICategory[]> => {
     return Category.findAll(
         {
+            where: { user_id },
             order: [["category_name", "DESC"]]
         }
     );
@@ -36,7 +37,6 @@ export const update = async (id: number, payload: ICategory): Promise<ICategory>
     const verification:CategoryVerifications = new CategoryVerifications(payload);
     
     verification.verifyCategoryName();
-    verification.verifyCategoryTotal();
     
     const category = await Category.findByPk(id);
 
