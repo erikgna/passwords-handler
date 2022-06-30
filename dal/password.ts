@@ -1,24 +1,17 @@
 require('dotenv').config()
 
-import jwt from 'jsonwebtoken';
-
 import { PasswordError } from '../errors/PasswordError'
 import { IPassword } from '../interfaces/Password'
 import { Category, Password } from '../models'
 import { PasswordVerifications } from '../utils/Password/PasswordVerifications';
 
-export const getAll = async (user_id: number): Promise<IPassword[]> => {
+export const getAll = async (userID: number): Promise<IPassword[]> => {
     const passwords = await Password.findAll(
         {
-            where: { user_id },
-            order: [["content_name", "DESC"]]
+            where: { userID },
+            order: [["contentName", "DESC"]]
         }
     );
-
-    passwords.forEach((password) => {
-        const decodedToken:{pwd:string} = jwt.verify(password.password, process.env.SECRET as string) as {pwd:string};
-        password.password =  decodedToken['pwd'];
-    })
 
     return passwords;
 }
@@ -34,14 +27,12 @@ export const getById = async (id: number): Promise<IPassword> => {
 export const create = async (payload: IPassword): Promise<IPassword> => {
     const verification:PasswordVerifications = new PasswordVerifications(payload);
 
-    const category = await Category.findOne({where: { id: payload.category_id }});
+    const category = await Category.findOne({where: { id: payload.categoryID }});
 
-    if(category?.user_id !== payload.user_id) throw new PasswordError(400, "Couldn't create password.");
+    if(category?.userID !== payload.userID) throw new PasswordError(400, "Couldn't create password.");
 
     verification.verifyContentName();
     verification.verifyPassword();
-
-    payload.password = jwt.sign({pwd: payload.password}, process.env.SECRET as string);
 
     const password = await Password.create(payload);
 
@@ -59,8 +50,6 @@ export const update = async (id: number, payload: IPassword): Promise<IPassword>
     const password = await Password.findByPk(id);
 
     if (!password) throw new PasswordError(406, 'This password was not found');
-
-    payload.password = jwt.sign({pwd: payload.password}, process.env.SECRET as string)
 
     const updatedPassword = await password.update(payload);
 

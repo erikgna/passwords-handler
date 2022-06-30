@@ -1,9 +1,9 @@
 export interface IPassword {
     id: number;
-    content_name: string;
+    contentName: string;
     password: string;
-    category_id: number;
-    user_id: number;
+    categoryID: number;
+    userID: number;
     createdAt?: Date;
     updatedAt?: Date;
 }

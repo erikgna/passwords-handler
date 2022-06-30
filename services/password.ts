@@ -4,11 +4,12 @@ import { IPassword } from '../interfaces/Password';
 import { IResult } from '../interfaces/Result'
 
 class PasswordService {
-    public static getAll = async (user_id: number):Promise<IResult> => {
+    public static getAll = async (userID: number):Promise<IResult> => {
         try {
-            const all:IPassword[] = await passwordDal.getAll(user_id);
+            const all:IPassword[] = await passwordDal.getAll(userID);
             return { status: 200, message: all }   
         } catch (error) {
+            console.log(error)
             if(error instanceof PasswordError) return { status: error.status, message: error.message };
             return { status: 500, message: "An internal error ocurred." }
         }
@@ -27,8 +28,8 @@ class PasswordService {
 
     public static create = async (payload: IPassword):Promise<IResult> => {
         try {
-            await passwordDal.create(payload);
-            return { status: 201 }
+            const createdPass:IPassword = await passwordDal.create(payload);
+            return { status: 201, message: createdPass }
         } catch (error) {
             if(error instanceof PasswordError) return { status: error.status, message: error.message };
             return { status: 500, message: "An internal error ocurred." }

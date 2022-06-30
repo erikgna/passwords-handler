@@ -17,6 +17,7 @@ class UserService {
 
     public static create = async (payload: IUser):Promise<IResult> => {
         try {
+            payload.isActive = false;
             const token:IToken = await userDal.create(payload);
             return { status: 201, message: token }
         } catch (error) {

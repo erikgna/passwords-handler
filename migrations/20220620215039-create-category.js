@@ -8,15 +8,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      category_name: {
+      categoryName: {
         type: Sequelize.STRING
       },
-      user_id: {
+      userID: {
         type: Sequelize.INTEGER,
         references: { model: 'Users', key: 'id' },
         onDelete: 'CASCADE',
       },
-      category_total: {
+      categoryTotal: {
         type: Sequelize.INTEGER
       },
       createdAt: {

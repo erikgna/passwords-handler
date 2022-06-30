@@ -2,7 +2,7 @@ require('dotenv').config()
 
 import { NextFunction, Request, Response } from "express";
 import { verify, decode } from "jsonwebtoken";
-import { refreshToken } from "../dal/user";
+import { refreshTokenFunction } from "../dal/user";
 import { IRefreshToken, IToken } from "../interfaces/User";
 import { setTokensHeaders } from "../utils/User/Token";
 
@@ -17,7 +17,7 @@ export async function ensureAuthentication (req: Request, res: Response, next: N
 
     const decodedToken = decode(token) as IRefreshToken;
 
-    req.body['user_id'] = decodedToken['id'];
+    req.body['userID'] = decodedToken['id'];
 
     try{
         if(process.env.SECRET) verify(token, process.env.SECRET);
@@ -26,10 +26,10 @@ export async function ensureAuthentication (req: Request, res: Response, next: N
     }
     catch(error){
         try {
-            const refresh_token:string = req.headers.refresh_token as string;
-            if(process.env.SECRET) verify(refresh_token, process.env.SECRET);
+            const refreshToken:string = req.headers.refreshToken as string;
+            if(process.env.SECRET) verify(refreshToken, process.env.SECRET);
 
-            const tokens:IToken = await refreshToken(refresh_token);
+            const tokens:IToken = await refreshTokenFunction(refreshToken);
 
             setTokensHeaders(res, req, tokens);
    

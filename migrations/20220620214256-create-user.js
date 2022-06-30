@@ -12,23 +12,24 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
-      user_name: {
+      userName: {
         type: Sequelize.STRING
       },
       password: {
         type: Sequelize.TEXT
       },
-      access_token: {
+      accessToken: {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      refresh_token: {
+      refreshToken: {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      is_active: {
+      isActive: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,

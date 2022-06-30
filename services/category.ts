@@ -4,9 +4,9 @@ import { ICategory } from '../interfaces/Category'
 import { IResult } from '../interfaces/Result'
 
 class CategoryService {
-    public static getAll = async (user_id: number):Promise<IResult> => {
+    public static getAll = async (userID: number):Promise<IResult> => {
         try {
-            const all:ICategory[] = await categoryDal.getAll(user_id);
+            const all:ICategory[] = await categoryDal.getAll(userID);
             return { status: 200, message: all }   
         } catch (error) {
             if(error instanceof CategoryError) return { status: error.status, message: error.message };
@@ -27,9 +27,11 @@ class CategoryService {
 
     public static create = async (payload: ICategory):Promise<IResult> => {
         try {
-            await categoryDal.create(payload);
-            return { status: 201 }
+            payload.categoryTotal = 0;
+            const categoryCreated:ICategory = await categoryDal.create(payload);
+            return { status: 201, message: categoryCreated }
         } catch (error) {
+            console.log(error)
             if(error instanceof CategoryError) return { status: error.status, message: error.message };
             return { status: 500, message: "An internal error ocurred." }
         }

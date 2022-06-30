@@ -26,10 +26,10 @@ export class UserVerifications{
     }
 
     verifyName(){
-        if(this._user.user_name.length < 3) throw new UserError(406, "Name must have at least 3 characters");
+        if(this._user.userName.length < 3) throw new UserError(406, "Name must have at least 3 characters");
     }
 
     verifyActive(){
-        if(!this._user.is_active) throw new UserError(400, "Account not actived");
+        if(!this._user.isActive) throw new UserError(400, "Account not actived");
     }
 }

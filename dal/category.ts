@@ -3,11 +3,11 @@ import { ICategory } from '../interfaces/Category'
 import {Category} from '../models'
 import { CategoryVerifications } from '../utils/Category/CategoryVerifications';
 
-export const getAll = async (user_id: number): Promise<ICategory[]> => {
+export const getAll = async (userID: number): Promise<ICategory[]> => {
     return Category.findAll(
         {
-            where: { user_id },
-            order: [["category_name", "DESC"]]
+            where: { userID },
+            order: [["categoryName", "DESC"]]
         }
     );
 }
@@ -22,7 +22,7 @@ export const getById = async (id: number): Promise<ICategory> => {
 
 export const create = async (payload: ICategory): Promise<ICategory> => {
     const verification:CategoryVerifications = new CategoryVerifications(payload);
-    
+
     verification.verifyCategoryName();
     verification.verifyCategoryTotal();
     

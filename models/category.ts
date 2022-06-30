@@ -5,9 +5,9 @@ import Password from './password'
 
 class Category extends Model<ICategory> implements ICategory {
     public id!: number
-    public category_name!: string
-    public user_id!: number
-    public category_total!: number
+    public categoryName!: string
+    public userID!: number
+    public categoryTotal!: number
     
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -19,15 +19,15 @@ Category.init({
         autoIncrement: true,
         primaryKey: true,
     },
-    category_name: {
+    categoryName: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
     },
-    user_id: {
+    userID: {
         type: DataTypes.INTEGER,
     },
-    category_total: {
+    categoryTotal: {
         type: DataTypes.INTEGER,
     },
 }, {
@@ -36,7 +36,7 @@ Category.init({
 
 Category.hasMany(Password, {
     sourceKey: 'id',
-    foreignKey: 'category_id',
+    foreignKey: 'categoryID',
     onDelete: 'CASCADE'
 });
 

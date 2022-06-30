@@ -8,4 +8,6 @@ const dbInit = () => Promise.all([
     User.sync(),
   ])
 
-export default dbInit 
+export default dbInit
+
+// npx nodemon ./index.ts

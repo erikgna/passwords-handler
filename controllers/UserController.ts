@@ -3,8 +3,6 @@ import { IResult } from "../interfaces/Result";
 import UserService from "../services/user";
 import { setTokensHeaders } from "../utils/User/Token";
 
-import jwt from 'jsonwebtoken';
-
 class UserController extends UserService {
     public static async login(req: Request, res:Response){
         const result:IResult = await UserService.loginService(req.body);

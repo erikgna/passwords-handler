@@ -8,10 +8,10 @@ module.exports = {
      * Example:
     */
     await queryInterface.bulkInsert('Passwords', [{
-      content_name: 'Netflix',
+      contentName: 'Netflix',
       password: '12345678',
-      user_id: 1,
-      category_id: 1,
+      userID: 1,
+      categoryID: 1,
       createdAt: "2022-06-22 18:49:48",
       updatedAt: "2022-06-22 18:49:48"
     }], {});

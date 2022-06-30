@@ -8,18 +8,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      content_name: {
+      contentName: {
         type: Sequelize.STRING
       },
       password: {
         type: Sequelize.TEXT
       },
-      user_id: {
+      userID: {
         type: Sequelize.INTEGER,
         references: { model: 'Users', key: 'id' },
         onDelete: 'CASCADE',
       },
-      category_id: {
+      categoryID: {
         type: Sequelize.INTEGER,
         references: { model: 'Categories', key: 'id' },
         onDelete: 'CASCADE',
