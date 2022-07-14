@@ -14,8 +14,7 @@ class UserController extends UserService {
 
     public static async createUser(req: Request, res:Response){
         const result:IResult = await UserService.create(req.body);
-
-        if(result.status === 200) setTokensHeaders(res, req, result.message);
+        if(result.status === 201) setTokensHeaders(res, req, result.message);
 
         res.status(result.status).json(result.message);
     }
