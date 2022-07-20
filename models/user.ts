@@ -8,11 +8,11 @@ import Password from './password'
 class User extends Model<IUser> implements IUser {
     public id!: number
     public email!: string
-    public user_name!: string
+    public userName!: string
     public password!: string
-    public access_token!: string
-    public refresh_token!: string
-    public is_active!: boolean;
+    public accessToken!: string
+    public refreshToken!: string
+    public isActive!: boolean;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -30,7 +30,7 @@ User.init({
         allowNull: false,
         unique: true
     },
-    user_name: {
+    userName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -39,17 +39,17 @@ User.init({
         allowNull: false,
         unique: true
     },
-    access_token: {
+    accessToken: {
         type: DataTypes.TEXT,
         allowNull: true,
         defaultValue: ''
     },
-    refresh_token: {
+    refreshToken: {
         type: DataTypes.TEXT,
         allowNull: true,
         defaultValue: ''
     },
-    is_active: {
+    isActive: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
@@ -59,13 +59,13 @@ User.init({
 
 User.hasMany(Password, {
     sourceKey: 'id',
-    foreignKey: 'user_id',
+    foreignKey: 'userID',
     onDelete: 'CASCADE'
 });
 
 User.hasMany(Category, {
     sourceKey: 'id',
-    foreignKey: 'user_id',
+    foreignKey: 'userID',
     onDelete: 'CASCADE'
 });
 

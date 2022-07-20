@@ -9,7 +9,5 @@ router
  .post('/user/login', UserController.login)
  .post('/user/create', UserController.createUser)
  .post('/user/delete', ensureAuthentication, UserController.deleteUser)
-
- .get('/user/:token', UserController.newToken)
- 
+  
 export default router;

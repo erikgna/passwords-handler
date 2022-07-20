@@ -9,9 +9,9 @@ module.exports = {
     */
     // await queryInterface.bulkInsert('Users', [{
     //   email: 'teste@email.com',
-    //   user_name: 'test',
+    //   userName: 'test',
     //   password: '12345678',
-    //   is_active: false,
+    //   isActive: false,
     //   createdAt: "2022-06-22 18:49:48",
     //   updatedAt: "2022-06-22 18:49:48"
     // }], {});

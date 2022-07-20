@@ -12,7 +12,6 @@ export const login = async (payload: IUser): Promise<IToken> => {
     const verification:UserVerifications = new UserVerifications(payload);
 
     verification.verifyEmail();
-    verification.verifyName();
     verification.verifyPassword();
 
     const dbUser = await User.findOne(
@@ -26,13 +25,13 @@ export const login = async (payload: IUser): Promise<IToken> => {
     if(!bcrypt.compare(payload.password, dbUser.password)) throw new UserError(400, "Passwords doesn't match.");
 
     if(process.env.SECRET) {
-        dbUser.access_token = jwt.sign({ name: payload.user_name, id: dbUser.id }, process.env.SECRET, { expiresIn: '15m' });
-        dbUser.refresh_token = jwt.sign({ id: dbUser.id }, process.env.SECRET, { expiresIn: '14d' });
+        dbUser.accessToken = jwt.sign({ name: dbUser.userName, id: dbUser.id }, process.env.SECRET, { expiresIn: '15m' });
+        dbUser.refreshToken = jwt.sign({ id: dbUser.id }, process.env.SECRET, { expiresIn: '14d' });
     }
 
     await dbUser?.update(dbUser);
 
-    return { access_token: dbUser.access_token, refresh_token: dbUser.refresh_token };
+    return { accessToken: dbUser.accessToken, refreshToken: dbUser.refreshToken };
 }
 
 export const create = async (payload: IUser): Promise<IToken> => {
@@ -51,13 +50,13 @@ export const create = async (payload: IUser): Promise<IToken> => {
     if(!user) throw new UserError(400, "Couldn't create password.");
 
     if(process.env.SECRET) {
-        user.access_token = jwt.sign({ name: payload.user_name, id: user.id }, process.env.SECRET, { expiresIn: '15m' });
-        user.refresh_token = jwt.sign({ id: user.id }, process.env.SECRET, { expiresIn: '14d' });
+        user.accessToken = jwt.sign({ name: payload.userName, id: user.id }, process.env.SECRET, { expiresIn: '15m' });
+        user.refreshToken = jwt.sign({ id: user.id }, process.env.SECRET, { expiresIn: '14d' });
     }
 
     await user.save();
 
-    return { access_token: user.access_token, refresh_token: user.refresh_token };
+    return { accessToken: user.accessToken, refreshToken: user.refreshToken };
 }
 
 // export const update = async (id: number, payload: IUser): Promise<IUser> => {
@@ -81,13 +80,13 @@ export const deleteUser = async (payload: IUser) => {
 
     if(!user) throw new UserError(400, "Couldn't find user.");
 
-    if(!bcrypt.compare(payload.password, user.password)) throw new UserError(400, "Passwords doesn't match.");
-
     const deletedPasswordCount = await User.destroy({
         where: { id: user.id }
     })
 
     if (deletedPasswordCount === 0) throw new UserError(406, 'User to delete not found');
+
+    return;
 }
 
 export const verifyEmail = async (id: number): Promise<IUser> => {
@@ -98,24 +97,23 @@ export const verifyEmail = async (id: number): Promise<IUser> => {
     return password;
 }
 
-export const refreshToken = async (refreshToken: string): Promise<IToken> => {
-    console.log(refreshToken)
+export const refreshTokenFunction = async (refreshToken: string): Promise<IToken> => {
     const decodedToken:IRefreshToken = jwt.decode(refreshToken) as IRefreshToken;
-    
+
     if(!decodedToken) throw new UserError(401, 'No token provided');
     
     const user = await User.findByPk(decodedToken.id);
 
     if (!user) throw new UserError(406, 'No user found');
 
-    if(user?.refresh_token !== refreshToken) throw new UserError(401, 'Token invalid');
+    if(user?.refreshToken !== refreshToken) throw new UserError(401, 'Token invalid');
 
     if(process.env.SECRET) {
-        user.access_token = jwt.sign({ name: user.user_name, id: user.id }, process.env.SECRET, { expiresIn: '15m' });
-        user.refresh_token = jwt.sign({ id: user.id }, process.env.SECRET, { expiresIn: '14d' });
+        user.accessToken = jwt.sign({ name: user.userName, id: user.id }, process.env.SECRET, { expiresIn: '15m' });
+        user.refreshToken = jwt.sign({ id: user.id }, process.env.SECRET, { expiresIn: '14d' });
     }
 
     await user.save();
 
-    return { access_token: user.access_token, refresh_token: user.refresh_token };
+    return { accessToken: user.accessToken, refreshToken: user.refreshToken };
 }

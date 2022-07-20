@@ -1,8 +1,8 @@
 export interface ICategory {
     id: number;
-    category_name: string;
-    user_id: number;
-    category_total?: number;
+    categoryName: string;
+    userID: number;
+    categoryTotal?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }

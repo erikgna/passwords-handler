@@ -1,7 +1,10 @@
 require('dotenv').config()
 
 import { NextFunction, Request, Response } from "express";
-import { verify } from "jsonwebtoken";
+import { verify, decode } from "jsonwebtoken";
+import { refreshTokenFunction } from "../dal/user";
+import { IRefreshToken, IToken } from "../interfaces/User";
+import { setTokensHeaders } from "../utils/User/Token";
 
 export async function ensureAuthentication (req: Request, res: Response, next: NextFunction) {
     const encodedToken:string | undefined = req.headers.authorization;
@@ -12,23 +15,27 @@ export async function ensureAuthentication (req: Request, res: Response, next: N
 
     const token:string = encodedToken.split(" ")[1];
 
+    const decodedToken = decode(token) as IRefreshToken;
+
+    req.body['userID'] = decodedToken['id'];
+
     try{
         if(process.env.SECRET) verify(token, process.env.SECRET);
 
         return next();
     }
-    catch(error){   
-        res.redirect(`http://localhost:3000/api/v1/user/${req.body.refresh_token}`)
+    catch(error){
+        try {
+            const refreshToken:string = req.headers.refreshToken as string;
+            if(process.env.SECRET) verify(refreshToken, process.env.SECRET);
+
+            const tokens:IToken = await refreshTokenFunction(refreshToken);
+
+            setTokensHeaders(res, req, tokens);
+   
+            return next();
+        } catch (error) {
+            return res.status(401).json("Token invalid.");
+        }
     }
 }
-
-// try {
-//     const refresh_token:string = req.body.refresh_token;
-//     if(process.env.SECRET) verify(refresh_token, process.env.SECRET);
-
-//     const teste = await refreshToken(refresh_token);
-
-//     res.status(200).send(teste);    
-// } catch (error) {
-//     res.status(401).json("Token invalid");    
-// }

@@ -9,7 +9,7 @@ export class PasswordVerifications{
     }
 
     verifyContentName(){
-        if(this._password.content_name.length <= 3) throw new PasswordError(406, "Content name shoud be at least 4 letters");
+        if(this._password.contentName.length <= 3) throw new PasswordError(406, "Content name shoud be at least 4 letters");
     }
 
     verifyPassword(){

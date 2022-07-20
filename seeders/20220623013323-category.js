@@ -8,9 +8,9 @@ module.exports = {
      * Example:
      */
     // await queryInterface.bulkInsert('Categories', [{
-    //   category_name: 'Diversão',
-    //   user_id: 1,
-    //   category_total: 0,
+    //   categoryName: 'Diversão',
+    //   userID: 1,
+    //   categoryTotal: 0,
     //   createdAt: "2022-06-22 18:49:48",
     //   updatedAt: "2022-06-22 18:49:48"
     // }], {});

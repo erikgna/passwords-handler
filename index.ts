@@ -4,7 +4,7 @@ import cors from 'cors';
 
 import passwords from './routes/passwords';
 import category from './routes/category';
-import user from './routes/user';
+import user from './routes/user'
 
 dotenv.config();
 

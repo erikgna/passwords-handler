@@ -4,9 +4,9 @@ import { IPassword } from '../interfaces/Password'
 
 class Password extends Model<IPassword> implements IPassword {
     public id!: number
-    public category_id!: number
-    public user_id!: number
-    public content_name!: string
+    public categoryID!: number
+    public userID!: number
+    public contentName!: string
     public password!: string
     
     public readonly createdAt!: Date;
@@ -19,13 +19,13 @@ Password.init({
         autoIncrement: true,
         primaryKey: true,
     },
-    category_id: {
+    categoryID: {
         type: DataTypes.INTEGER,
     },
-    user_id: {
+    userID: {
         type: DataTypes.INTEGER,
     },
-    content_name: {
+    contentName: {
         type: DataTypes.STRING,
         allowNull: false,
     },

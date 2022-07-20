@@ -1,19 +1,19 @@
 export interface IUser {
     id: number;
     email: string;
-    user_name: string;
+    userName: string;
     password: string;
     confirmPassword?: string;
-    access_token?: string;
-    refresh_token?: string;
-    is_active: boolean;
+    accessToken?: string;
+    refreshToken?: string;
+    isActive: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
 export interface IToken{
-    access_token: string;
-    refresh_token: string;
+    accessToken: string;
+    refreshToken: string;
 }
 
 export interface IRefreshToken{

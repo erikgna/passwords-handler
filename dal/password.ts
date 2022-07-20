@@ -1,18 +1,19 @@
 require('dotenv').config()
 
-import bcrypt from 'bcrypt';
-
 import { PasswordError } from '../errors/PasswordError'
 import { IPassword } from '../interfaces/Password'
-import { Password } from '../models'
+import { Category, Password } from '../models'
 import { PasswordVerifications } from '../utils/Password/PasswordVerifications';
 
-export const getAll = async (): Promise<IPassword[]> => {
-    return Password.findAll(
+export const getAll = async (userID: number): Promise<IPassword[]> => {
+    const passwords = await Password.findAll(
         {
-            order: [["content_name", "DESC"]]
+            where: { userID },
+            order: [["contentName", "DESC"]]
         }
     );
+
+    return passwords;
 }
 
 export const getById = async (id: number): Promise<IPassword> => {
@@ -25,11 +26,13 @@ export const getById = async (id: number): Promise<IPassword> => {
 
 export const create = async (payload: IPassword): Promise<IPassword> => {
     const verification:PasswordVerifications = new PasswordVerifications(payload);
-    
+
+    const category = await Category.findOne({where: { id: payload.categoryID }});
+
+    if(category?.userID !== payload.userID) throw new PasswordError(400, "Couldn't create password.");
+
     verification.verifyContentName();
     verification.verifyPassword();
-
-    payload.password = await bcrypt.hash(payload.password, 12);
 
     const password = await Password.create(payload);
 
@@ -47,8 +50,6 @@ export const update = async (id: number, payload: IPassword): Promise<IPassword>
     const password = await Password.findByPk(id);
 
     if (!password) throw new PasswordError(406, 'This password was not found');
-
-    payload.password = await bcrypt.hash(payload.password, 12);
 
     const updatedPassword = await password.update(payload);
 
