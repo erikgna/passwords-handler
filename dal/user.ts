@@ -29,7 +29,7 @@ export const login = async (payload: IUser): Promise<IToken> => {
         dbUser.refreshToken = jwt.sign({ id: dbUser.id }, process.env.SECRET, { expiresIn: '14d' });
     }
 
-    await dbUser?.update(dbUser);
+    await dbUser.save();
 
     return { accessToken: dbUser.accessToken, refreshToken: dbUser.refreshToken };
 }
