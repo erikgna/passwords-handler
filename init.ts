@@ -9,5 +9,3 @@ const dbInit = () => Promise.all([
   ])
 
 export default dbInit
-
-// npx nodemon ./index.ts
