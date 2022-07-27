@@ -9,7 +9,6 @@ class PasswordService {
             const all:IPassword[] = await passwordDal.getAll(userID);
             return { status: 200, message: all }   
         } catch (error) {
-            console.log(error)
             if(error instanceof PasswordError) return { status: error.status, message: error.message };
             return { status: 500, message: "An internal error ocurred." }
         }
