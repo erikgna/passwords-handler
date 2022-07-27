@@ -59,22 +59,6 @@ export const create = async (payload: IUser): Promise<IToken> => {
     return { accessToken: user.accessToken, refreshToken: user.refreshToken };
 }
 
-// export const update = async (id: number, payload: IUser): Promise<IUser> => {
-//     const verification:UserVerifications = new UserVerifications(payload);
-    
-//     const password = await User.findByPk(id);
-
-//     if (!password) throw new UserError(406, 'This password was not found');
-
-//     payload.password = await bcrypt.hash(payload.password, 12);
-
-//     const updatedPassword = await password.update(payload);
-
-//     if(!updatedPassword) throw new UserError(400, "Couldn't update password");
-
-//     return updatedPassword;
-// }
-
 export const deleteUser = async (payload: IUser) => {
     const user = await User.findByPk(payload.id);
 

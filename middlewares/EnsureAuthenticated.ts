@@ -8,7 +8,7 @@ import { setTokensHeaders } from "../utils/User/Token";
 
 export async function ensureAuthentication (req: Request, res: Response, next: NextFunction) {
     try{
-        const authorization:string | undefined = req.headers.authorization;
+        const authorization:string | undefined = req.headers.authorization;        
 
         if(!authorization){
             return res.status(401).json("User unauthorized.");
@@ -31,7 +31,7 @@ export async function ensureAuthentication (req: Request, res: Response, next: N
             
             if(!refreshToken){
                 return res.status(401).json("User unauthorized.");
-            }
+            }            
 
             if(process.env.SECRET) verify(refreshToken, process.env.SECRET);
 
@@ -41,7 +41,6 @@ export async function ensureAuthentication (req: Request, res: Response, next: N
             
             return next();
         } catch (error) {
-            console.log(error)
             return res.status(401).json("Token invalid.");
         }
     }
